@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import socket from "./socket";
+import Sidebar from "./components/Sidebar"; // Pbf65
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {/* ✅ Protect Dashboard Route */}
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Sidebar /><Dashboard /></ProtectedRoute>} /> {/* P8fd0 */}
       </Routes>
     </Router>
   );
