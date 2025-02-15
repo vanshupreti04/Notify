@@ -17,10 +17,7 @@ dotenv.config();
 
 const app = express();
 
-// ✅ Connect to MongoDB (Only in app.js)
 connect();
-
-// ✅ Middleware
 
 app.use(cors());
 app.use(morgan("tiny"));
@@ -29,19 +26,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 
-// ✅ API Routes
 app.use("/users", userRoutes);
 app.use("/pages", pageRoutes);
 app.use("/blocks", blockRoutes);
 
-// ✅ Create HTTP & WebSocket Server
 const server = createServer(app);
 const io = new Server(server, {
     cors: { origin: "*", methods: ["GET", "POST"] },
     perMessageDeflate: true,
 });
 
-// ✅ WebSocket Authentication
 io.use((socket, next) => {
     const token = socket.handshake.auth?.token || socket.handshake.query?.token;
 
@@ -61,7 +55,6 @@ io.use((socket, next) => {
     }
 });
 
-// ✅ WebSocket Handling
 io.on("connection", (socket) => {
     console.log(`🟢 WebSocket Connected: ${socket.id}`);
 
@@ -93,11 +86,32 @@ io.on("connection", (socket) => {
     socket.on("error", (error) => {
         console.error("❌ WebSocket Error:", error);
     });
+
+    // Add more event handlers and functionalities for real-time updates
+    socket.on("deleteBlock", async ({ pageId, blockId }) => {
+        try {
+            await Block.findByIdAndDelete(blockId);
+            socket.to(pageId).emit("removeBlock", { blockId });
+        } catch (error) {
+            console.error("❌ Error deleting block:", error);
+        }
+    });
+
+    socket.on("moveBlock", async ({ pageId, blockId, newPosition }) => {
+        try {
+            const block = await Block.findById(blockId);
+            if (block) {
+                block.position = newPosition;
+                await block.save();
+                socket.to(pageId).emit("updateBlockPosition", { blockId, newPosition });
+            }
+        } catch (error) {
+            console.error("❌ Error moving block:", error);
+        }
+    });
 });
 
-// ✅ Default Route (For Debugging)
 app.get("/", (req, res) => {
     res.send("Server is running 🚀");
 });
-export { app, server, io }; // ✅ Export io for use in other files
-
+export { app, server, io };
