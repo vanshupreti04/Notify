@@ -21,6 +21,7 @@ const app = express();
 connect();
 
 // ✅ Middleware
+
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.json({ limit: "50kb" }));
@@ -98,5 +99,5 @@ io.on("connection", (socket) => {
 app.get("/", (req, res) => {
     res.send("Server is running 🚀");
 });
-
 export { app, server, io }; // ✅ Export io for use in other files
+

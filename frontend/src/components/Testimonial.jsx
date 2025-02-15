@@ -1,12 +1,15 @@
 import React from "react";
 import { AnimatedTestimonialsDemo } from "../blocks/AnimatedTestimonial/AnimatedTestimonialDemo"; // ✅ Updated import path
+import { useTranslation } from "react-i18next"; // ✅ Import translation hook
 
 const Testimonial = () => {
+  const { t } = useTranslation(); // ✅ Get translation function
+
   return (
     <div className="text-white text-center -mt-14 px-8">
-      {/* Main Heading */}
+      {/* Main Heading - Now Translatable */}
       <h2 className="text-5xl md:text-8xl font-extrabold tracking-wide font-serif">
-        Testimonials
+        {t("testimonials")} {/* ✅ Dynamically translated */}
       </h2>
 
       {/* Enlarged Purple Section with Adjusted Padding */}

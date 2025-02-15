@@ -1,15 +1,19 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import VariableProximity from "../blocks/text-animations/VariableProximity";
-import PixelTransition from "../blocks/Pixel-Transition/PixelTransition"; // Import PixelTransition
+import PixelTransition from "../blocks/Pixel-Transition/PixelTransition";
+import { useTranslation } from "react-i18next"; // ✅ Import translation hook
 
 const Hero = () => {
-  const containerRef = useRef(null);  // ✅ Define ref inside the component
+  const containerRef = useRef(null);
+  const navigate = useNavigate();
+  const { t } = useTranslation(); // ✅ Initialize translation function
 
   return (
     <section className="flex items-center justify-between h-screen mt-6 pl-16 md:pl-32 bg-[#000000] text-white">
       {/* Left side: Text and buttons */}
       <div ref={containerRef} className="max-w-2xl">
-        {/* Animated Hero Title */}
+        {/* Animated Hero Title (NOT TRANSLATED) */}
         <VariableProximity
           label={`Visualize \n \n \n \n \n \n  Write \n Organize`}
           fromFontVariationSettings="'wght' 400, 'opsz' 9"
@@ -20,19 +24,24 @@ const Hero = () => {
           className="text-6xl md:text-8xl font-bold font-['Futura'] leading-tight"
         />
 
-        {/* Tagline */}
+        {/* ✅ Translated Tagline */}
         <p className="mt-8 text-xl md:text-2xl text-[#AAAAAA] font-normal leading-snug">
-          Your ultimate space for seamless note-taking <br />
-          and collaboration
+          {t("tagline")}
         </p>
 
         {/* Buttons */}
         <div className="mt-10 flex space-x-6">
-          <button className="px-6 py-3 text-lg font-medium text-black bg-[#AC6AFF] rounded-md transition-all duration-300 hover:text-white">
-            Get Started
+          <button
+            onClick={() => navigate("/login")}
+            className="px-6 py-3 text-lg font-medium text-black bg-[#AC6AFF] rounded-md transition-all duration-300 hover:text-white"
+          >
+            {t("get_started")}
           </button>
-          <button className="px-6 py-3 text-lg font-medium text-white border border-white rounded-md transition-all duration-300 hover:border-white hover:text-[#AC6AFF]">
-            Learn More
+          <button
+            onClick={() => navigate("/docs")}
+            className="px-6 py-3 text-lg font-medium text-white border border-white rounded-md transition-all duration-300 hover:border-white hover:text-[#AC6AFF]"
+          >
+            {t("learn_more")}
           </button>
         </div>
       </div>

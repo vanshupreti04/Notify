@@ -1,93 +1,155 @@
-import React from "react";
-import { FaInstagram, FaXTwitter, FaLinkedin, FaFacebook, FaYoutube } from "react-icons/fa6";
-import logo from "../assets/logo.png"; // Adjust the path as needed
+import React, { useState } from "react";
+import { Link } from "react-router-dom"; // Import Link for routing
+import {
+  FaInstagram,
+  FaXTwitter,
+  FaLinkedin,
+  FaFacebook,
+  FaYoutube,
+  FaChevronDown,
+} from "react-icons/fa6";
+import logo from "../assets/logo.png";
+import { useTranslation } from "react-i18next"; // Translation hook
 
 const Footer = () => {
+  const { i18n, t } = useTranslation(); // Get translation functions
+  const [language, setLanguage] = useState("🌍 English");
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleLanguageChange = (lang, langCode) => {
+    setLanguage(lang);
+    i18n.changeLanguage(langCode); // Change language globally
+    setShowDropdown(false);
+  };
+
   return (
-    <>
-      <footer className="text-white py-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-12"> {/* Increased gap for spacing */}
-            
-            {/* Logo & Socials */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <img src={logo} alt="NoTiFy Logo" className="h-12 w-auto" />
-                <span className="text-xl font-bold text-white mb-3">NoTiFy</span>
-              </div>
-              
-              <div className="flex space-x-4 mt-12">
-                <FaInstagram className="w-5 h-5 text-gray-700 hover:text-black transition" />
-                <FaXTwitter className="w-5 h-5 text-gray-700 hover:text-black transition" />
-                <FaLinkedin className="w-5 h-5 text-gray-700 hover:text-black transition" />
-                <FaFacebook className="w-5 h-5 text-gray-700 hover:text-black transition" />
-                <FaYoutube className="w-5 h-5 text-gray-700 hover:text-black transition" />
-              </div>
-              
-              <button className="border border-gray-400 px-4 py-2 mt-8 text-sm rounded-md flex items-center space-x-2 hover:bg-gray-100 transition">
-                <span>🌍 English</span>
+    <footer className="text-white py-12">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
+          
+          {/* Logo & Socials */}
+          <div className="space-y-6">
+            <div className="flex items-center space-x-3">
+              <img src={logo} alt={t("notify_name")} className="h-12 w-auto" />
+              <span className="text-xl font-bold text-white mb-3">
+                {t("notify")}
+              </span>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex space-x-4 mt-12">
+              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+                <FaInstagram className="w-5 h-5 text-gray-700 hover:text-white transition duration-300" />
+              </a>
+              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer">
+                <FaXTwitter className="w-5 h-5 text-gray-700 hover:text-white transition duration-300" />
+              </a>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
+                <FaLinkedin className="w-5 h-5 text-gray-700 hover:text-white transition duration-300" />
+              </a>
+              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+                <FaFacebook className="w-5 h-5 text-gray-700 hover:text-white transition duration-300" />
+              </a>
+              <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+                <FaYoutube className="w-5 h-5 text-gray-700 hover:text-white transition duration-300" />
+              </a>
+            </div>
+
+            {/* Language Selector */}
+            <div className="relative inline-block">
+              <button
+                className="border border-gray-400 px-4 py-2 mt-4 text-sm rounded-md flex items-center justify-between space-x-2 hover:bg-gray-100 hover:text-black transition w-40"
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <span>{language}</span>
+                <FaChevronDown className="w-4 h-4" />
               </button>
 
-              {/* Added margin below the button for extra spacing */}
-              <div className="mt-5">
-                <p className="text-sm text-gray-500">
-                  <a href="#" className="hover:underline">Do Not Sell or Share My Info</a> | 
-                  <a href="#" className="hover:underline mt-2"> Cookie settings</a>
-                </p>
-                
-                <p className="text-sm text-gray-500 mt-2">© 2025 NoTiFy Labs, Inc.</p>
-              </div>
+              {showDropdown && (
+                <div className="absolute left-0 mt-2 w-40 bg-white text-black rounded-md shadow-md">
+                  <ul className="py-2 text-sm">
+                    <li
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => handleLanguageChange("🌍 English", "en")}
+                    >
+                      English
+                    </li>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => handleLanguageChange("🇯🇵 日本語", "ja")}
+                    >
+                      日本語 (Japanese)
+                    </li>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => handleLanguageChange("🇮🇳 हिंदी", "hi")}
+                    >
+                      हिंदी (Hindi)
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
 
-            {/* Footer Links with Added Spacing */}
-            <div>
-              <h3 className="font-semibold mb-5">Company</h3> {/* Increased margin below heading */}
-              <ul className="space-y-2 text-gray-600"> {/* Increased spacing between links */}
-                <li><a href="#" className="hover:underline">About us</a></li>
-                <li><a href="#" className="hover:underline">Careers</a></li>
-                <li><a href="#" className="hover:underline">Security</a></li>
-                <li><a href="#" className="hover:underline">Status</a></li>
-                <li><a href="#" className="hover:underline">Terms & privacy</a></li>
-              </ul>
+            {/* Additional Links & Copyright */}
+            <div className="mt-5">
+              <p className="text-sm text-gray-500">
+                <a href="#" className="hover:underline">{t("do_not_sell")}</a> |{" "}
+                <a href="#" className="hover:underline">{t("cookie_settings")}</a>
+              </p>
+              <p className="text-xs text-gray-500 mt-2">
+                © {new Date().getFullYear()} Notify Labs. All rights reserved.
+              </p>
             </div>
-
-            <div>
-              <h3 className="font-semibold mb-5">Download</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li><a href="#" className="hover:underline">iOS & Android</a></li>
-                <li><a href="#" className="hover:underline">Mac & Windows</a></li>
-                <li><a href="#" className="hover:underline">Calendar</a></li>
-                <li><a href="#" className="hover:underline">Web Clipper</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-5">Resources</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li><a href="#" className="hover:underline">Help center</a></li>
-                <li><a href="#" className="hover:underline">Pricing</a></li>
-                <li><a href="#" className="hover:underline">Blog</a></li>
-                <li><a href="#" className="hover:underline">Community</a></li>
-                <li><a href="#" className="hover:underline">Integrations</a></li>
-                <li><a href="#" className="hover:underline">Templates</a></li>
-                <li><a href="#" className="hover:underline">Affiliates</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-5">NoTiFy for</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li><a href="#" className="hover:underline">Enterprise</a></li>
-                <li><a href="#" className="hover:underline">Small business</a></li>
-                <li><a href="#" className="hover:underline">Personal</a></li>
-              </ul>
-              <p className="mt-6 font-semibold hover:underline cursor-pointer">Explore more →</p>
-            </div>
-
           </div>
+
+          {/* Footer Links */}
+          <div>
+            <h3 className="font-semibold mb-5">{t("company")}</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li><Link to="/about" className="hover:underline">{t("about_us")}</Link></li>
+              <li><Link to="/careers" className="hover:underline">{t("careers")}</Link></li>
+              <li><Link to="/security" className="hover:underline">{t("security")}</Link></li>
+              <li><Link to="/status" className="hover:underline">{t("status")}</Link></li>
+              <li><Link to="/terms" className="hover:underline">{t("terms_privacy")}</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-5">{t("download")}</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li><Link to="/mobile-apps" className="hover:underline">{t("mobile_apps")}</Link></li>
+              <li><Link to="/desktop-apps" className="hover:underline">{t("desktop_apps")}</Link></li>
+              <li><Link to="/calendar-sync" className="hover:underline">{t("calendar_sync")}</Link></li>
+              <li><Link to="/browser-extension" className="hover:underline">{t("browser_extension")}</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-5">{t("resources")}</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li><Link to="/help-center" className="hover:underline">{t("help_center")}</Link></li>
+              <li><Link to="/pricing" className="hover:underline">{t("pricing")}</Link></li>
+              <li><Link to="/blog" className="hover:underline">{t("blog")}</Link></li>
+              <li><Link to="/community" className="hover:underline">{t("community")}</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-5">{t("notify_for")}</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li><Link to="/enterprise" className="hover:underline">{t("enterprise")}</Link></li>
+              <li><Link to="/small-business" className="hover:underline">{t("small_business")}</Link></li>
+              <li><Link to="/personal" className="hover:underline">{t("personal")}</Link></li>
+            </ul>
+            <p className="mt-6 font-semibold hover:underline cursor-pointer">
+              <Link to="/explore">{t("explore_more")} →</Link>
+            </p>
+          </div>
+
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 };
 

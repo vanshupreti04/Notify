@@ -1,29 +1,33 @@
 import React from "react";
+import { Link } from "react-router-dom"; // ✅ Import Link for navigation
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next"; // ✅ Import translation hook
 import CardSecondDemo from "../blocks/3D-Card/CardSecondDemo"; // Adjusted import path
 
 const UseCase = () => {
+  const { t } = useTranslation(); // ✅ Initialize translation
+
   return (
     <div className="mt-24 px-6 md:px-32 flex flex-col md:flex-row justify-between items-center relative">
       {/* Left-aligned content */}
       <div className="max-w-2xl z-10 mt-24">
         <h1 className="text-5xl md:text-6xl font-extrabold text-white leading-[1.3]">
-          Built for Everyone,
+          {t("built_for_everyone")}
         </h1>
         <h1 className="text-5xl mt-3 md:text-6xl font-extrabold text-white leading-[1.3]">
-          Designed for You.
+          {t("designed_for_you")}
         </h1>
 
         <p className="text-base md:text-lg text-gray-400 mt-4">
-          The ultimate tool to streamline your workflow, enhance creativity, and boost productivity—effortlessly.
+          {t("usecase_tagline")}
         </p>
 
-        <a
-          href="#"
+        <Link
+          to="/docs" // ✅ Link to /docs
           className="inline-flex items-center gap-2 mt-6 text-base md:text-lg font-medium text-[#AC6AFF] hover:underline"
         >
-          Explore Docs <ArrowRight size={20} />
-        </a>
+          {t("explore_docs")} <ArrowRight size={20} />
+        </Link>
       </div>
 
       {/* Right-aligned floating 3D card with overlap */}

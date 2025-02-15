@@ -4,12 +4,13 @@ import React from "react";
 import { Carousel, Card } from "./AppleCard";
 
 // Importing images using relative paths
-import aiImage from "../../assets/ai.png";
+import AiWorkspace from "../../assets/Ai-workspace.jpg";
 import workspaceImage from "../../assets/workspace.png";
 import offlineImage from "../../assets/offline.png";
 import collaborationImage from "../../assets/collaboration.png";
 import automationImage from "../../assets/automation.png";
 import cloudsyncImage from "../../assets/cloudsync.png";
+import realTimeCollaborationImage from "../../assets/real-time-collaboration.png"; // New image import
 
 const AppleCardsSecondDemo = () => {
   const cards = data.map((card, index) => (
@@ -17,7 +18,7 @@ const AppleCardsSecondDemo = () => {
   ));
 
   return (
-    <div className="w-full h-full py-4 flex justify-center pr-12"> 
+    <div className="w-full h-full py-4 flex justify-center pr-12">
       <div className="max-w-7xl w-full">
         <Carousel items={cards} />
       </div>
@@ -58,7 +59,7 @@ const data = [
         Smart notes, <br /> smarter you.
       </>
     ),
-    src: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=3556&auto=format&fit=crop",
+    src: AiWorkspace,
     content: <DummyContent />,
   },
   {
@@ -68,19 +69,20 @@ const data = [
         Your space, <br /> your rules.
       </>
     ),
-    src: "https://images.unsplash.com/photo-1531554694128-c4c6665f59c2?q=80&w=3387&auto=format&fit=crop",
+    src: workspaceImage,
     content: <DummyContent />,
   },
   {
     category: "Offline Mode 🚀",
     title: "Work anytime, anywhere.",
-    src: "https://images.unsplash.com/photo-1713869791518-a770879e60dc?q=80&w=2333&auto=format&fit=crop",
+    src: offlineImage,
     content: <DummyContent />,
   },
   {
     category: "Real-time Collaboration 🤝",
     title: "Instant teamwork, seamless flow.",
-    src: "https://images.unsplash.com/photo-1599202860130-f600f4948364?q=80&w=2515&auto=format&fit=crop",
+    // Using the new local image for real-time collaboration
+    src: realTimeCollaborationImage,
     content: <DummyContent />,
   },
   {
@@ -90,7 +92,7 @@ const data = [
         Let the system <br /> do it.
       </>
     ),
-    src: "https://images.unsplash.com/photo-1602081957921-9137a5d6eaee?q=80&w=2793&auto=format&fit=crop",
+    src: automationImage,
     content: <DummyContent />,
   },
   {
@@ -100,7 +102,7 @@ const data = [
         Your data, <br /> everywhere.
       </>
     ),
-    src: "https://images.unsplash.com/photo-1511984804822-e16ba72f5848?q=80&w=2048&auto=format&fit=crop",
+    src: cloudsyncImage,
     content: <DummyContent />,
   },
 ];

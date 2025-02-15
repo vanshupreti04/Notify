@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Link } from "react-router-dom"; // ✅ Import Link for navigation
 import { CardBody, CardContainer, CardItem } from "./Card";
 import customImage from "../../assets/uses.png"; // ✅ Import the image correctly
 
@@ -29,10 +30,13 @@ export function CardSecondDemo() {
 
         {/* Floating Buttons */}
         <div className="flex justify-between items-center mt-20">
-          <CardItem translateZ={20} translateX={-40} as="button" className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white">
+          {/* ✅ Link "Try now" to /register */}
+          <CardItem translateZ={20} translateX={-40} as={Link} to="/register" className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white cursor-pointer">
             Try now →
           </CardItem>
-          <CardItem translateZ={20} translateX={40} as="button" className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold">
+
+          {/* ✅ Link "Sign up" to /login */}
+          <CardItem translateZ={20} translateX={40} as={Link} to="/login" className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold cursor-pointer">
             Sign up
           </CardItem>
         </div>
