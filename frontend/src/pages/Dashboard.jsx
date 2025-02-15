@@ -3,6 +3,7 @@ import axios from "axios";
 import Editor from "../components/Editor";
 import socket from "../socket";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const Dashboard = () => {
     const [pages, setPages] = useState([]);
@@ -151,59 +152,15 @@ const Dashboard = () => {
                 ))}
             </div>
 
-            {/* ✅ Create Page Button (Fixed) */}
-            <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded" onClick={createPage}>
-                + New Page
-            </button>
-
-            {/* ✅ Page List */}
-            <div className="mt-4">
-                {pages.map((page) => (
-                    <div key={page._id} className="p-4 border rounded bg-white shadow-md">
-                        <h2 className="text-xl font-bold">{page.title}</h2>
-
-                        {/* ✅ Open Page Editor */}
-                        <button className="mt-2 px-4 py-2 bg-gray-500 text-white rounded" onClick={() => setSelectedPage(page._id)}>
-                            ✏️ Edit Page
-                        </button>
-
-                        {/* ✅ Add Block */}
-                        <button className="mt-2 px-4 py-2 bg-green-500 text-white rounded" onClick={() => addBlock(page._id)}>
-                            ➕ Add Block
-                        </button>
-
-                        {/* ✅ Save Page */}
-                        <button className="mt-2 px-4 py-2 bg-yellow-500 text-white rounded" onClick={() => savePage(page._id)}>
-                            💾 Save Page
-                        </button>
-
-                        {/* ✅ Invite User */}
-                        <div className="mt-2">
-                            <input
-                                type="email"
-                                placeholder="Enter email"
-                                className="border p-2 rounded"
-                                value={inviteEmail}
-                                onChange={(e) => setInviteEmail(e.target.value)}
-                            />
-                            <select
-                                className="border p-2 ml-2 rounded"
-                                value={inviteRole}
-                                onChange={(e) => setInviteRole(e.target.value)}
-                            >
-                                <option value="viewer">Viewer</option>
-                                <option value="editor">Editor</option>
-                            </select>
-                            <button
-                                className="ml-2 px-4 py-2 bg-purple-500 text-white rounded"
-                                onClick={() => inviteUser(page._id)}
-                            >
-                                📩 Invite
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <Sidebar
+                pages={pages}
+                selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
+                createPage={createPage}
+                addBlock={addBlock}
+                savePage={savePage}
+                inviteUser={inviteUser}
+            />
 
             {/* ✅ Page Editor */}
             {selectedPage && (

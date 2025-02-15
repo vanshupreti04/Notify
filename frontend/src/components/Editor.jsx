@@ -1,11 +1,23 @@
 import React, { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Placeholder from "@tiptap/extension-placeholder";
 import socket from "../socket";
 
 const Editor = ({ blockId, initialContent, pageId }) => {
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Underline,
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+            }),
+            Placeholder.configure({
+                placeholder: 'Start typing...',
+            }),
+        ],
         content: initialContent,
         onUpdate: ({ editor }) => {
             const updatedContent = editor.getHTML();
