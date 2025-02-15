@@ -1,31 +1,57 @@
-import { Router } from 'express';
-import * as userController from '../controllers/user.controller.js';
-import { body } from 'express-validator';
-import * as authMiddleware from '../middleware/auth.middleware.js';
+import { Router } from "express";
+import { body, validationResult } from "express-validator";
+import { 
+    createUserController, 
+    loginController, 
+    profileController, 
+    logoutController, 
+    getAllUsersController 
+} from "../controllers/user.controller.js"; // ✅ FIX: Named imports
+
+import { authUser } from "../middleware/auth.middleware.js"; // ✅ FIX: Named import for middleware
 
 const router = Router();
 
+// ✅ Middleware for Validation Handling
+const validateRequest = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+};
+
 // ✅ Register Route
-router.post('/register',
-    body('email').isEmail().withMessage('Email must be a valid email address'),
-    body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
-    userController.createUserController
+router.post(
+    "/register",
+    [
+        body("firstName").notEmpty().withMessage("First name is required"),
+        body("lastName").notEmpty().withMessage("Last name is required"),
+        body("email").isEmail().withMessage("Email must be a valid email address"),
+        body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
+    ],
+    validateRequest,
+    createUserController
 );
 
 // ✅ Login Route
-router.post('/login',
-    body('email').isEmail().withMessage('Email must be a valid email address'),
-    body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
-    userController.loginController
+router.post(
+    "/login",
+    [
+        body("email").isEmail().withMessage("Email must be a valid email address"),
+        body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
+    ],
+    validateRequest,
+    loginController
 );
 
 // ✅ Profile Route (Protected)
-router.get('/profile', authMiddleware.authUser, userController.profileController);
+router.get("/profile", authUser, profileController);
 
-// ✅ Logout Route (🔄 Changed from GET to POST)
-router.post('/logout', authMiddleware.authUser, userController.logoutController);
+// ✅ Logout Route
+router.post("/logout", authUser, logoutController);
 
 // ✅ Get All Users (Protected)
-router.get('/all', authMiddleware.authUser, userController.getAllUsersController);
+router.get("/all", authUser, getAllUsersController);
 
 export default router;

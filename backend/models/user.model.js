@@ -2,58 +2,46 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
-        trim: true,
-        minLength: [2, "First name must be at least 2 characters long"],
-        maxLength: [30, "First name must not be longer than 30 characters"]
+const userSchema = new mongoose.Schema(
+    {
+        firstName: { type: String, required: true, trim: true },
+        lastName: { type: String, required: true, trim: true },
+        email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+        password: { type: String, required: true, select: false } // Prevent password from being returned in queries
     },
+    { timestamps: true }
+);
 
-    lastName: {
-        type: String,
-        required: true,
-        trim: true,
-        minLength: [2, "Last name must be at least 2 characters long"],
-        maxLength: [30, "Last name must not be longer than 30 characters"]
-    },
-
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowercase: true,
-        minLength: [6, "Email must be at least 6 characters long"],
-        maxLength: [50, "Email must not be longer than 50 characters"]
-    },
-
-    password: {
-        type: String,
-        required: true,
-        select: false, // Password should not be returned in queries unless explicitly requested
+// ✅ Hash password before saving
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        next(error);
     }
 });
 
-userSchema.statics.hashPassword = async function (password) {
-    return await bcrypt.hash(password, 10);
-}
-
-// **🔑 Compare passwords**
-userSchema.methods.isValidPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
+// ✅ Compare entered password with hashed password
+userSchema.methods.isValidPassword = async function (enteredPassword) {
+    try {
+        return await bcrypt.compare(enteredPassword, this.password);
+    } catch (error) {
+        console.error("Error comparing passwords:", error);
+        return false;
+    }
 };
 
-// **🛡️ Generate JWT Token**
+// ✅ Generate JWT Token
 userSchema.methods.generateJWT = function () {
     return jwt.sign(
-        { id: this._id, email: this.email, firstName: this.firstName, lastName: this.lastName },
+        { id: this._id, email: this.email },
         process.env.JWT_SECRET,
         { expiresIn: "24h" }
     );
 };
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+// ✅ Modern ES6+ Export
+export default mongoose.model("User", userSchema);
