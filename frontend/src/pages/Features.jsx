@@ -57,13 +57,13 @@ const Features = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-10 lg:px-20">
+    <div className="min-h-screen bg-black text-white px-8 py-12 lg:px-24">
       {/* Hero Section with a smooth fade-in */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col lg:flex-row items-center justify-between gap-12"
+        className="flex flex-col lg:flex-row items-center justify-between gap-8"
       >
         {/* Left Side - Heading & Description */}
         <div className="max-w-xl">
@@ -134,7 +134,7 @@ const Features = () => {
 
       {/* Features Grid with staggered fade-in */}
       <motion.div
-        className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -161,3 +161,4 @@ const Features = () => {
 };
 
 export default Features;
+

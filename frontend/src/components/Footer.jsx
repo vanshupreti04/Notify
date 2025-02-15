@@ -111,7 +111,8 @@ const Footer = () => {
               <li><Link to="/careers" className="hover:underline">{t("careers")}</Link></li>
               <li><Link to="/security" className="hover:underline">{t("security")}</Link></li>
               <li><Link to="/status" className="hover:underline">{t("status")}</Link></li>
-              <li><Link to="/terms" className="hover:underline">{t("terms_privacy")}</Link></li>
+              {/* Updated route for Terms & Privacy */}
+              <li><Link to="/terms-privacy" className="hover:underline">{t("terms_privacy")}</Link></li>
             </ul>
           </div>
 
@@ -142,8 +143,9 @@ const Footer = () => {
               <li><Link to="/small-business" className="hover:underline">{t("small_business")}</Link></li>
               <li><Link to="/personal" className="hover:underline">{t("personal")}</Link></li>
             </ul>
+            {/* Updated route for Explore More */}
             <p className="mt-6 font-semibold hover:underline cursor-pointer">
-              <Link to="/explore">{t("explore_more")} →</Link>
+              <Link to="/explore-more">{t("explore_more")} →</Link>
             </p>
           </div>
 
@@ -154,3 +156,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
