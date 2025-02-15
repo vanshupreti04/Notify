@@ -1,17 +1,21 @@
-import userModel from '../models/user.model.js';
+import userModel from "../models/user.model.js";
+import bcrypt from "bcrypt";
 
-export const createUser = async ({ firstName, lastName, email, password }) => {
-    if (!firstName || !lastName || !email || !password) {
-        throw new Error("First name, last name, email, and password are required");
-    }
+const SALT_ROUNDS = 10; // Recommended salt rounds
 
-    const hashedPassword = await userModel.hashPassword(password);
+// ✅ Create User Function (Fixes Hashing Issue)
+export const createUser = async (userData) => {
+    const { firstName, lastName, email, password } = userData;
 
+    // ✅ Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+    // ✅ Create the new user with hashed password
     const user = await userModel.create({
-        firstName,   // ✅ Include first name
-        lastName,    // ✅ Include last name
+        firstName,
+        lastName,
         email,
-        password: hashedPassword,
+        password: hashedPassword, // Save hashed password
     });
 
     return user;
@@ -22,4 +26,4 @@ export const getAllUsers = async ({ userId }) => {
         _id: { $ne: userId }
     });
     return users;
-}
+} 

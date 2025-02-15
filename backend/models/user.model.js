@@ -3,57 +3,30 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
-        trim: true,
-        minLength: [2, "First name must be at least 2 characters long"],
-        maxLength: [30, "First name must not be longer than 30 characters"]
-    },
-
-    lastName: {
-        type: String,
-        required: true,
-        trim: true,
-        minLength: [2, "Last name must be at least 2 characters long"],
-        maxLength: [30, "Last name must not be longer than 30 characters"]
-    },
-
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowercase: true,
-        minLength: [6, "Email must be at least 6 characters long"],
-        maxLength: [50, "Email must not be longer than 50 characters"]
-    },
-
-    password: {
-        type: String,
-        required: true,
-        select: false, // Password should not be returned in queries unless explicitly requested
-    }
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    password: { type: String, required: true, select: false } // Hide password by default
 });
 
-userSchema.statics.hashPassword = async function (password) {
-    return await bcrypt.hash(password, 10);
-}
+// ✅ Hash password before saving
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    next();
+});
 
-// **🔑 Compare passwords**
-userSchema.methods.isValidPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
+// ✅ Compare entered password with hashed password
+userSchema.methods.isValidPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// **🛡️ Generate JWT Token**
+// ✅ Generate JWT Token
 userSchema.methods.generateJWT = function () {
     return jwt.sign(
-        { id: this._id, email: this.email, firstName: this.firstName, lastName: this.lastName },
+        { id: this._id, email: this.email },
         process.env.JWT_SECRET,
         { expiresIn: "24h" }
     );
 };
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+export default mongoose.model("User", userSchema);
