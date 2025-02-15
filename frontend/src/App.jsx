@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { io } from "socket.io-client";
+
+// Importing pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Features from "./pages/Features";
@@ -31,11 +34,20 @@ import SmallBusiness from "./pages/SmallBusiness";
 import Personal from "./pages/Personal";
 
 // New pages
-import TermsPrivacy from "./pages/TermsPrivacy";   // Ensure file is named TermsPrivacy.jsx or TermsPrivacy.js
+import TermsPrivacy from "./pages/TermsPrivacy";
 import Enterprise from "./pages/Enterprise";
-import ExploreMore from "./pages/ExploreMore";      // Ensure file is named ExploreMore.jsx or ExploreMore.js
+import ExploreMore from "./pages/ExploreMore";
 
-// Optional fallback for 404
+// WebSocket connection
+const socket = io("http://localhost:3000"); // Replace with actual URL
+
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const isAuthenticated = false; // Replace with real authentication logic
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
+// 404 Page
 const NotFound = () => (
   <div className="min-h-screen bg-black text-white flex items-center justify-center">
     <h1 className="text-5xl font-bold">404 - Page Not Found</h1>
@@ -51,7 +63,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Your original routes */}
+        {/* Main Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/features" element={<Features />} />
@@ -59,7 +71,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* ✅ Protect Dashboard Route */}
+        {/* Protected Route - Dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -69,34 +81,34 @@ const App = () => {
           }
         />
 
-        {/* Footer routes - Company */}
+        {/* Footer Routes - Company */}
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="/security" element={<Security />} />
         <Route path="/status" element={<Status />} />
 
-        {/* Footer routes - Download */}
+        {/* Footer Routes - Download */}
         <Route path="/mobile-apps" element={<MobileApps />} />
         <Route path="/desktop-apps" element={<DesktopApps />} />
         <Route path="/calendar-sync" element={<CalendarSync />} />
         <Route path="/browser-extension" element={<BrowserExtension />} />
 
-        {/* Footer routes - Resources */}
+        {/* Footer Routes - Resources */}
         <Route path="/help-center" element={<HelpCenter />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/community" element={<Community />} />
 
-        {/* Footer routes - NoTiFy For */}
+        {/* Footer Routes - NoTiFy For */}
         <Route path="/small-business" element={<SmallBusiness />} />
         <Route path="/personal" element={<Personal />} />
 
-        {/* New pages */}
+        {/* New Pages */}
         <Route path="/terms-privacy" element={<TermsPrivacy />} />
         <Route path="/enterprise" element={<Enterprise />} />
         <Route path="/explore-more" element={<ExploreMore />} />
 
-        {/* Fallback route for unknown paths */}
+        {/* 404 Fallback */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
