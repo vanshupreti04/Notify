@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Features from "./pages/Features";
@@ -8,8 +8,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import socket from "./socket";
-import Sidebar from "./components/Sidebar"; // Pbf65
 
+// ✅ Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -20,12 +20,12 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [token, navigate]);
 
-  return token ? children : null;
+  return token ? children : <Navigate to="/login" replace />;
 };
 
 const App = () => {
   useEffect(() => {
-    socket.connect(); // ✅ Connect to WebSocket on app start
+    socket.connect(); // ✅ Connect WebSocket on app start
     return () => socket.disconnect(); // Cleanup on unmount
   }, []);
 
@@ -38,8 +38,16 @@ const App = () => {
         <Route path="/docs" element={<Docs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
         {/* ✅ Protect Dashboard Route */}
-        <Route path="/dashboard" element={<ProtectedRoute><Sidebar /><Dashboard /></ProtectedRoute>} /> {/* P8fd0 */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

@@ -27,6 +27,7 @@ const Editor = ({ blockId, initialContent, pageId }) => {
 
     useEffect(() => {
         socket.on("updateBlock", ({ blockId: updatedId, content }) => {
+            console.log("🔄 Received block update for", updatedId);
             if (updatedId === blockId) {
                 editor?.commands.setContent(content);
             }
