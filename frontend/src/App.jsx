@@ -43,7 +43,7 @@ const socket = io("http://localhost:3000"); // Replace with actual URL
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = false; // Replace with real authentication logic
+  const isAuthenticated = !!localStorage.getItem("token");
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
