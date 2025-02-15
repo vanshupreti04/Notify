@@ -1,57 +1,31 @@
-import { Router } from "express";
-import { body, validationResult } from "express-validator";
-import { 
-    createUserController, 
-    loginController, 
-    profileController, 
-    logoutController, 
-    getAllUsersController 
-} from "../controllers/user.controller.js"; // ✅ FIX: Named imports
-
-import { authUser } from "../middleware/auth.middleware.js"; // ✅ FIX: Named import for middleware
+import { Router } from 'express';
+import * as userController from '../controllers/user.controller.js';
+import { body } from 'express-validator';
+import * as authMiddleware from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-// ✅ Middleware for Validation Handling
-const validateRequest = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-};
-
 // ✅ Register Route
-router.post(
-    "/register",
-    [
-        body("firstName").notEmpty().withMessage("First name is required"),
-        body("lastName").notEmpty().withMessage("Last name is required"),
-        body("email").isEmail().withMessage("Email must be a valid email address"),
-        body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
-    ],
-    validateRequest,
-    createUserController
+router.post('/register',
+    body('email').isEmail().withMessage('Email must be a valid email address'),
+    body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
+    userController.createUserController
 );
 
 // ✅ Login Route
-router.post(
-    "/login",
-    [
-        body("email").isEmail().withMessage("Email must be a valid email address"),
-        body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
-    ],
-    validateRequest,
-    loginController
+router.post('/login',
+    body('email').isEmail().withMessage('Email must be a valid email address'),
+    body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
+    userController.loginController
 );
 
 // ✅ Profile Route (Protected)
-router.get("/profile", authUser, profileController);
+router.get('/profile', authMiddleware.authUser, userController.profileController);
 
-// ✅ Logout Route
-router.post("/logout", authUser, logoutController);
+// ✅ Logout Route (🔄 Changed from GET to POST)
+router.post('/logout', authMiddleware.authUser, userController.logoutController);
 
 // ✅ Get All Users (Protected)
-router.get("/all", authUser, getAllUsersController);
+router.get('/all', authMiddleware.authUser, userController.getAllUsersController);
 
 export default router;
