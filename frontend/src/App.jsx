@@ -1,8 +1,6 @@
-import React from "react";
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// Existing pages
-import Home from "./pages/Home";
+import Home from './pages/Home';
 import About from "./pages/About";
 import Features from "./pages/Features";
 import Docs from "./pages/Docs";
@@ -45,6 +43,11 @@ const NotFound = () => (
 );
 
 const App = () => {
+  useEffect(() => {
+    socket.connect(); // ✅ Connect to WebSocket on app start
+    return () => socket.disconnect(); // Cleanup on unmount
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -55,7 +58,8 @@ const App = () => {
         <Route path="/docs" element={<Docs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* ✅ Protect Dashboard Route */}
+        <Route path="/dashboard" element={<ProtectedRoute><Sidebar /><Dashboard /></ProtectedRoute>} /> {/* P8fd0 */}
 
         {/* Footer routes - Company */}
         <Route path="/about-us" element={<AboutUs />} />
