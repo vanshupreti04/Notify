@@ -1,11 +1,9 @@
 import userModel from "../models/user.model.js";
 import { validationResult } from "express-validator";
-import crypto from "crypto"; // ✅ Import crypto for manual hashing
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"; // Import JWT for generating tokens
 
-// ✅ Manual Hash Function
-const hashPassword = (password) => {
-    return crypto.createHash("sha256").update(password).digest("hex");
-};
+const SALT_ROUNDS = 10; // Recommended salt rounds
 
 // ✅ User Registration Controller
 export const createUserController = async (req, res) => {
@@ -22,7 +20,9 @@ export const createUserController = async (req, res) => {
             return res.status(400).json({ error: "Email is already registered" });
         }
 
-        const hashedPassword = hashPassword(password);
+        // ✅ Hash password securely with bcrypt
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+        
         const user = new userModel({ firstName, lastName, email, password: hashedPassword });
         await user.save();
 
@@ -36,7 +36,7 @@ export const createUserController = async (req, res) => {
     }
 };
 
-// ✅ Login Controller
+// ✅ Login Controller (Fixed bcrypt.compare() issue)
 export const loginController = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -47,15 +47,24 @@ export const loginController = async (req, res) => {
 
     try {
         const user = await userModel.findOne({ email });
+
         if (!user) {
             return res.status(401).json({ error: "Invalid email or password" });
         }
 
-        const hashedPassword = hashPassword(password);
-        if (user.password !== hashedPassword) {
+        // ✅ Ensure password and user.password are defined before comparing
+        if (!password || !user.password) {
+            return res.status(400).json({ error: "Password is required" });
+        }
+
+        // ✅ Compare entered password with hashed password in DB
+        const isMatch = await bcrypt.compare(password, user.password);
+        
+        if (!isMatch) {
             return res.status(401).json({ error: "Invalid email or password" });
         }
 
+        // ✅ Generate JWT token
         const token = user.generateJWT();
         const { password: _, ...userResponse } = user.toObject();
 
@@ -76,6 +85,7 @@ export const getAllUsersController = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
 // ✅ Logout Controller
 export const logoutController = async (req, res) => {
     try {
@@ -86,6 +96,7 @@ export const logoutController = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
 // ✅ Profile Controller (Fetches user details)
 export const profileController = async (req, res) => {
     try {
@@ -102,4 +113,3 @@ export const profileController = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
-
