@@ -15,7 +15,9 @@ import jwt from "jsonwebtoken";
 import Block from "./models/block.model.js";
 
 dotenv.config();
+
 const app = express();
+
 connect();
 
 app.use(cors());
@@ -37,6 +39,7 @@ const io = new Server(server, {
 
 io.use((socket, next) => {
     const token = socket.handshake.auth?.token || socket.handshake.query?.token;
+
     if (!token) {
         console.error("❌ WebSocket Connection Rejected: No Token Provided");
         return next(new Error("Unauthorized: No Token"));

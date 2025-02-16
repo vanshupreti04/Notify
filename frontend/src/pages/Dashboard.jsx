@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Editor from "../components/Editor";
+import socket from "../socket"; // Import socket
 import {
     CheckCircle,
     FilePlus2,
@@ -31,6 +32,7 @@ const Dashboard = () => {
     const [showWelcomeScreen, setShowWelcomeScreen] = useState(true);
     const [renamePopup, setRenamePopup] = useState(null);
     const [newFileName, setNewFileName] = useState("");
+    const [notifications, setNotifications] = useState([]); // Add notifications state
 
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
@@ -62,6 +64,16 @@ const Dashboard = () => {
 
         fetchPages();
     }, [token]);
+
+    useEffect(() => {
+        socket.on("receiveInvite", ({ inviter, pageTitle, pageId }) => {
+            setNotifications((prev) => [...prev, { inviter, pageTitle, pageId }]);
+        });
+
+        return () => {
+            socket.off("receiveInvite");
+        };
+    }, []);
 
     const fetchBlocks = async (pageId) => {
         try {
@@ -279,6 +291,22 @@ const Dashboard = () => {
                     </div>
                 </div>
             )}
+
+            {/* Notifications */}
+            <div className="p-4 bg-gray-100">
+                <h2 className="text-lg font-semibold">Notifications</h2>
+                {notifications.map((notif, index) => (
+                    <div key={index} className="bg-white p-3 my-2 rounded shadow">
+                        <p>{notif.inviter} invited you to edit "{notif.pageTitle}"</p>
+                        <button
+                            onClick={() => socket.emit("joinPage", notif.pageId)}
+                            className="bg-blue-500 text-white px-4 py-1 rounded"
+                        >
+                            Join
+                        </button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
