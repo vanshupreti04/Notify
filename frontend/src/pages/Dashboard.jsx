@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+<<<<<<< Updated upstream
+=======
+import Editor from "../components/Editor";
+import socket, { connectSocket, disconnectSocket } from "../socket";
+>>>>>>> Stashed changes
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Editor from "../components/Editor";
@@ -63,6 +68,14 @@ const Dashboard = () => {
         fetchPages();
     }, [token]);
 
+    useEffect(() => {
+        connectSocket(); // Connect WebSocket when the component mounts
+
+        return () => {
+            disconnectSocket(); // Disconnect WebSocket when the component unmounts
+        };
+    }, []);
+
     const fetchBlocks = async (pageId) => {
         try {
             const { data } = await axios.get(`http://localhost:3000/blocks/${pageId}`, {
@@ -78,6 +91,7 @@ const Dashboard = () => {
         }
     };
 
+<<<<<<< Updated upstream
     const createNewPage = async () => {
         setShowEditor(true);
         setShowWelcomeScreen(false); 
@@ -158,6 +172,10 @@ const Dashboard = () => {
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
+=======
+    return (
+        <div>
+>>>>>>> Stashed changes
             <Sidebar
                 pages={pages}
                 selectedPage={selectedPage}

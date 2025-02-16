@@ -44,6 +44,7 @@ const io = new Server(server, {
     perMessageDeflate: true,
 });
 
+<<<<<<< Updated upstream
 const PORT = process.env.PORT || 3000;
 
 // ✅ Start Server & Handle Errors
@@ -59,6 +60,8 @@ server.listen(PORT, () => {
 });
 
 // ✅ WebSocket Authentication Middleware
+=======
+>>>>>>> Stashed changes
 io.use((socket, next) => {
     const token = socket.handshake.auth?.token || socket.handshake.query?.token;
     if (!token) {
@@ -142,6 +145,21 @@ io.on("connection", (socket) => {
 // ✅ Health Check Route
 app.get("/", (req, res) => {
     res.send("Server is running 🚀");
+});
+
+const port = Number(process.env.PORT) || 3000;
+
+server.listen(port, () => {
+    console.log(`🚀 Server running on port ${port}`);
+}).on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+        console.error(`❌ Port ${port} is already in use. Trying another port...`);
+        server.listen(0, () => {
+            console.log(`🚀 Server running on available port ${server.address().port}`);
+        });
+    } else {
+        console.error("❌ Server error:", err);
+    }
 });
 
 export { app, server, io };
