@@ -1,19 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-<<<<<<< Updated upstream
-=======
 import Editor from "../components/Editor";
 import socket, { connectSocket, disconnectSocket } from "../socket";
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import Editor from "../components/Editor";
 import {
     CheckCircle,
     FilePlus2,
@@ -45,13 +35,16 @@ const Dashboard = () => {
 
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    const pagesFetched = useRef(false); // Prevent refetching pages multiple times
 
+    // Redirect to login if no token
     useEffect(() => {
         if (!token) navigate("/login");
     }, [token, navigate]);
 
+    // Fetch pages (Preventing infinite loop)
     useEffect(() => {
-        if (!token) return;
+        if (!token || pagesFetched.current) return;
 
         const fetchPages = async () => {
             try {
@@ -60,6 +53,7 @@ const Dashboard = () => {
                 });
 
                 setPages(data);
+                pagesFetched.current = true; // Mark as fetched
 
                 if (data.length > 0) {
                     setSelectedPage(data[0]._id);
@@ -74,12 +68,10 @@ const Dashboard = () => {
         fetchPages();
     }, [token]);
 
+    // WebSocket connection
     useEffect(() => {
-        connectSocket(); // Connect WebSocket when the component mounts
-
-        return () => {
-            disconnectSocket(); // Disconnect WebSocket when the component unmounts
-        };
+        connectSocket();
+        return () => disconnectSocket();
     }, []);
 
     const fetchBlocks = async (pageId) => {
@@ -97,10 +89,9 @@ const Dashboard = () => {
         }
     };
 
-<<<<<<< Updated upstream
     const createNewPage = async () => {
         setShowEditor(true);
-        setShowWelcomeScreen(false); 
+        setShowWelcomeScreen(false);
 
         try {
             const { data } = await axios.post(
@@ -158,12 +149,6 @@ const Dashboard = () => {
         }
     };
 
-    const handleShare = () => {
-        console.log("Sharing with:", shareEmail);
-        setShowSharePopup(false);
-        setShareEmail("");
-    };
-
     const addComment = () => {
         if (newComment.trim() === "") return;
         setComments((prev) => [newComment, ...prev]);
@@ -177,17 +162,6 @@ const Dashboard = () => {
 
     return (
         <div className="flex h-screen bg-gray-100">
-            {/* Sidebar */}
-=======
-    return (
-        <div>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
             <Sidebar
                 pages={pages}
                 selectedPage={selectedPage}
@@ -198,7 +172,7 @@ const Dashboard = () => {
             {/* Main Content */}
             <div className={`flex-1 flex flex-col transition-all duration-300 ${showCommentSidebar ? "mr-72" : ""}`}>
 
-                {/* Header (Always Visible) */}
+                {/* Header */}
                 <div className="flex justify-end items-center p-4">
                     <button
                         className="flex items-center text-gray-700 hover:text-gray-900 mr-4"
@@ -207,17 +181,10 @@ const Dashboard = () => {
                         <MessageCircle size={20} className="mr-1" />
                         Comment
                     </button>
-                    <button
-                        className="flex items-center text-gray-700 hover:text-gray-900"
-                        onClick={() => setShowSharePopup(true)}
-                    >
-                        <Share2 size={20} className="mr-1" />
-                        Share
-                    </button>
                 </div>
 
-                 {/* Welcome Screen */}
-                 {showWelcomeScreen ? (
+                {/* Welcome Screen */}
+                {showWelcomeScreen ? (
                     <div className="flex flex-col items-center justify-center h-full">
                         <Notebook size={50} className="text-gray-600 mb-4" />
                         <h1 className="text-2xl font-semibold text-gray-800">Welcome to Notify</h1>
@@ -230,85 +197,9 @@ const Dashboard = () => {
                         </button>
                     </div>
                 ) : (
-                    <>
-
-                {/* Editor */}
-                {showEditor && (
-                    <div className="flex-1 flex items-start justify-center mt-6 p-6 w-full transition-all duration-300">
-                        <div className="w-full max-w-3xl bg-white border border-gray-300 rounded-lg shadow-lg p-6">
-                            <Editor
-                                pageId={selectedPage}
-                                blocks={blocks[selectedPage] || []}
-                                setBlocks={(newBlocks) =>
-                                    setBlocks((prev) => ({ ...prev, [selectedPage]: newBlocks }))
-                                }
-                            />
-                        </div>
-                    </div>
-                      )}
-                </>
+                    showEditor && <Editor pageId={selectedPage} blocks={blocks[selectedPage] || []} />
                 )}
             </div>
-
-            {/* Comment Sidebar */}
-            {showCommentSidebar && (
-                <div className="fixed right-0 top-0 h-full w-72 bg-[#2C1A47] p-4 shadow-lg text-white flex flex-col transition-all duration-300">
-                    <button onClick={() => setShowCommentSidebar(false)} className="absolute top-4 right-4 text-white">
-                        <X size={20} />
-                    </button>
-                    <h2 className="font-bold text-lg">Comment</h2>
-
-                    {/* Comment List (Messages Appear from Bottom-Up) */}
-                    <div className="flex-1 overflow-y-auto mt-auto flex flex-col-reverse pb-4">
-                        {comments.length === 0 ? (
-                            <p className="text-center text-white opacity-50">Write a comment...</p>
-                        ) : (
-                            comments.map((comment, index) => (
-                                <div key={index} className="relative flex justify-between items-center bg-white text-black p-2 rounded-md mb-2">
-                                    <span>{comment}</span>
-                                    <div className="relative">
-                                        <button onClick={() => setCommentOptions(commentOptions === index ? null : index)}>
-                                            <MoreVertical size={18} className="text-gray-700" />
-                                        </button>
-
-                                        {/* Delete button (just below the three-dot icon) */}
-                                        {commentOptions === index && (
-                                            <div className="absolute right-0 top-6 w-20 bg-white text-black rounded-md shadow-md">
-                                                <button
-                                                    onClick={() => {
-                                                        deleteComment(index);
-                                                        setCommentOptions(null);
-                                                    }}
-                                                    className="flex items-center px-3 py-1 w-full text-sm transition-colors duration-200 hover:bg-gray-300 rounded-md"
-                                                >
-                                                    <Trash2 size={14} className="mr-1" /> Delete
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
-
-                    {/* Input Field (Remains at the Bottom) */}
-                    <div className="pb-4">
-                        <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            className="w-full border p-2 rounded-lg text-black"
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                        />
-                        <button
-                            onClick={addComment}
-                            className="mt-2 bg-white text-black px-4 py-2 rounded-lg flex items-center w-full"
-                        >
-                            <Send size={16} className="mr-1" /> Send
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
