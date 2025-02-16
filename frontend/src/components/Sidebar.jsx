@@ -1,163 +1,156 @@
-import React, { useState } from "react";
-import { X, Plus, Send } from "lucide-react"; // Icons from Lucide
-import logo from "../assets/logo.png";
-import TextBlock from "./TextBlock"; // Import the TextBlock component
+import React, { useState, useRef } from "react";
+import { Plus, Trash2, Edit, Search, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // For navigation
 
-const Sidebar = ({ createPage, savePage }) => {
-  const [showEditor, setShowEditor] = useState(false);
-  const [showSavePrompt, setShowSavePrompt] = useState(false);
-  const [showInvitePopup, setShowInvitePopup] = useState(false);
-  const [newPageTitle, setNewPageTitle] = useState("Untitled Page");
-  const [emailOrId, setEmailOrId] = useState("");
-  const [editorBlocks, setEditorBlocks] = useState([]);
+const Sidebar = ({ pages, selectedPage, setSelectedPage, createPage, setPages, createNestedPage }) => {
+    const [editingPageId, setEditingPageId] = useState(null);
+    const [tempFileNames, setTempFileNames] = useState({});
+    const [deletePopup, setDeletePopup] = useState(null);
+    const [settingsOpen, setSettingsOpen] = useState(false); // State for settings menu
+    const inputRef = useRef(null);
+    const navigate = useNavigate(); // Navigation hook
 
-  // Create a new page
-  const handleNewPage = () => {
-    setShowEditor(true);
-    createPage();
-  };
+    // Function to handle renaming state
+    const handleRename = () => {
+        setEditingPageId(null);
+    };
 
-  // Close the editor with a save prompt
-  const handleCloseEditor = () => {
-    setShowSavePrompt(true);
-  };
+    // Function to handle logout
+    const handleLogout = () => {
+        // Perform logout logic here (e.g., clearing tokens, user state)
+        navigate("/"); // Redirect to home route
+    };
 
-  // Confirm close (without saving)
-  const confirmCloseEditor = () => {
-    setShowEditor(false);
-    setShowSavePrompt(false);
-  };
+    return (
+        <div className="w-64 bg-[#2C1A47] text-white p-4 border-r border-gray-700 h-screen flex flex-col relative">
+            {/* User Info */}
+            <div className="flex items-center space-x-2 pb-4 border-b border-gray-600">
+                <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
+                <span className="font-semibold">Antonio Erdeljac</span>
+            </div>
 
-  // Add a new block dynamically
-  const handleAddBlock = () => {
-    setEditorBlocks((prevBlocks) => [
-      ...prevBlocks,
-      { id: Date.now() } // Only store an ID, `TextBlock` handles the editor
-    ]);
-  };
+            {/* Sidebar Menu Options */}
+            <div className="mt-4 space-y-2 relative">
+                <button
+                    className="flex items-center space-x-2 text-gray-300 hover:bg-[#422c63] px-3 py-2 rounded-lg w-full"
+                >
+                    <Search size={18} /> <span>Search</span>
+                </button>
 
-  return (
-    <div className="flex h-screen bg-black text-white">
-      {/* Sidebar */}
-      <div className="w-64 p-4 bg-[#2C1A47] border-r border-gray-700">
-        {/* Logo & App Name */}
-        <div className="flex items-center space-x-2 mb-6">
-          <img src={logo} alt="App Logo" className="w-8 h-8" />
-          <h1 className="text-xl font-bold">Notify</h1>
-        </div>
+                {/* Settings Button */}
+                <button
+                    className="flex items-center space-x-2 text-gray-300 hover:bg-[#422c63] px-3 py-2 rounded-lg w-full relative"
+                    onClick={() => setSettingsOpen(!settingsOpen)}
+                >
+                    <Settings size={18} /> <span>Settings</span>
+                </button>
 
-        {/* Tagline */}
-        <p className="text-center text-sm text-gray-400 mb-3">Start with your first note!</p>
+                {/* Settings Dropdown */}
+                {settingsOpen && (
+                    <div className="absolute top-12 left-60 bg-[#3D1E70] text-white shadow-lg rounded-md p-2 w-40 border border-gray-600 z-50">
+                        <button
+                            className="block w-full text-left px-4 py-2 hover:bg-purple-400 hover:text-black transition rounded"
+                        >
+                            Edit Profile
+                        </button>
+                        <button
+                            onClick={handleLogout}
+                            className="block w-full text-left px-4 py-2 hover:bg-red-600 transition rounded"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                )}
+            </div>
 
-        {/* New Page Button */}
-        <button
-          onClick={handleNewPage}
-          className="w-full bg-black text-white font-bold py-2 rounded-lg hover:bg-gray-800 flex items-center justify-center space-x-2 mb-4"
-        >
-          <Plus size={18} /> <span>Add a Page</span>
-        </button>
-
-        {/* Actions (Only visible after clicking "Add Page") */}
-        {showEditor && (
-          <div className="flex flex-col space-y-2">
-            <button onClick={handleAddBlock} className="w-full text-left px-2 py-1 bg-black hover:bg-gray-800 rounded text-white">
-              + Add Block
-            </button>
-            <button onClick={savePage} className="w-full text-left px-2 py-1 bg-black hover:bg-gray-800 rounded text-white">
-              💾 Save Page
-            </button>
-            <button onClick={() => setShowInvitePopup(true)} className="w-full text-left px-2 py-1 bg-black hover:bg-gray-800 rounded text-white">
-              📩 Invite User
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Page Editor Panel */}
-      {showEditor && (
-        <div className="flex-1 h-screen bg-black p-6 relative">
-          {/* Page Header Row */}
-          <div className="flex justify-between items-center mb-4">
-            {/* Page Title Input */}
-            <input
-              type="text"
-              value={newPageTitle}
-              onChange={(e) => setNewPageTitle(e.target.value)}
-              className="text-2xl font-bold w-full p-2 border-b border-gray-500 outline-none bg-transparent text-white placeholder-gray-500"
-              placeholder="Untitled"
-            />
-
-            {/* Close Button */}
+            {/* New Page Button */}
             <button
-              onClick={handleCloseEditor}
-              className="text-gray-400 hover:text-white text-xl"
+                onClick={createPage}
+                className="mt-4 flex items-center space-x-2 bg-[#3D1E70] text-white font-bold py-2 px-3 rounded-lg w-full hover:bg-[#4e2a8d] transition"
             >
-              <X size={24} />
+                <Plus size={18} /> <span>New Page</span>
             </button>
-          </div>
 
-          {/* First Block (Always Present) */}
-          <TextBlock />
+            {/* Pages List */}
+            <div className="mt-4 flex-grow space-y-1">
+                {pages.map((page) => (
+                    <div key={page._id} className="relative group">
+                        <div
+                            className="flex items-center justify-between p-2 rounded cursor-pointer "
+                            onClick={() => setSelectedPage(page._id)}
+                        >
+                            {/* Editable Title */}
+                            {editingPageId === page._id ? (
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    className="text-black border border-gray-500 rounded-md w-full focus:outline-none"
+                                    value={tempFileNames[page._id] || page.title || "Untitled"}
+                                    onChange={(e) =>
+                                        setTempFileNames({ ...tempFileNames, [page._id]: e.target.value })
+                                    }
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                            handleRename();
+                                        }
+                                    }}
+                                    autoFocus
+                                />
+                            ) : (
+                                <span className="truncate">{tempFileNames[page._id] || page.title || "Untitled"}</span>
+                            )}
 
-          {/* Additional Blocks (Dynamic) */}
-          {editorBlocks.map((block) => (
-            <TextBlock key={block.id} />
-          ))}
-        </div>
-      )}
+                            <div className="flex items-center space-x-2">
+                                {/* Rename Button */}
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setEditingPageId(page._id);
+                                        setTempFileNames({
+                                            ...tempFileNames,
+                                            [page._id]: tempFileNames[page._id] || page.title || "Untitled",
+                                        });
+                                        setTimeout(() => inputRef.current?.focus(), 0);
+                                    }}
+                                    className="opacity-50 hover:opacity-100"
+                                >
+                                    <Edit size={16} />
+                                </button>
 
-      {/* Save Confirmation Popup */}
-      {showSavePrompt && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-gray-900 p-6 rounded-lg shadow-lg text-center">
-            <p className="text-white text-lg mb-4">Do you want to save the page before closing?</p>
-            <div className="flex justify-center space-x-4">
-              <button onClick={confirmCloseEditor} className="bg-black px-4 py-2 rounded hover:bg-gray-800 text-white">
-                Cancel
-              </button>
-              <button
-                onClick={() => { savePage(); confirmCloseEditor(); }}
-                className="bg-purple-600 px-4 py-2 rounded hover:bg-purple-700 text-white"
-              >
-                Save & Close
-              </button>
+                                {/* Delete Button */}
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDeletePopup(page._id);
+                                    }}
+                                    className="opacity-50 hover:opacity-100 text-red-400"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+
+                                {/* Add Nested Page Button */}
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        createNestedPage(page._id);
+                                    }}
+                                    className="opacity-50 hover:opacity-100 text-green-400"
+                                >
+                                    <Plus size={16} />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
-          </div>
-        </div>
-      )}
 
-      {/* Invite User Popup */}
-      {showInvitePopup && (
-        <div className="fixed inset-0 flex items-center justify-end bg-black bg-opacity-50">
-          <div className="bg-[#2C1A47] p-6 rounded-lg shadow-lg text-center w-96 mr-6">
-            <h3 className="text-white text-lg mb-2">Invite a User</h3>
-            <input
-              type="email"
-              placeholder="Enter email or user ID"
-              value={emailOrId}
-              onChange={(e) => setEmailOrId(e.target.value)}
-              className="w-full p-2 mb-4 bg-black border border-gray-600 rounded text-white"
-            />
-            <div className="flex justify-center space-x-4">
-              <button onClick={() => setShowInvitePopup(false)} className="bg-black px-4 py-2 rounded hover:bg-gray-800 text-white">
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  alert(`Invitation sent to: ${emailOrId}`);
-                  setShowInvitePopup(false);
-                  setEmailOrId("");
-                }}
-                className="bg-purple-600 px-4 py-2 rounded hover:bg-purple-700 text-white flex items-center space-x-2"
-              >
-                <Send size={16} /> <span>Send</span>
-              </button>
-            </div>
-          </div>
+            {/* Trash Section */}
+            <button className="flex items-center space-x-2 text-gray-300 hover:bg-[#422c63] px-3 py-2 rounded-lg w-full">
+                <Trash2 size={18} /> <span>Trash</span>
+            </button>
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default Sidebar;
