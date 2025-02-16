@@ -45,6 +45,7 @@ const io = new Server(server, {
 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const PORT = process.env.PORT || 3000;
 
 // ✅ Start Server & Handle Errors
@@ -60,6 +61,8 @@ server.listen(PORT, () => {
 });
 
 // ✅ WebSocket Authentication Middleware
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 io.use((socket, next) => {
