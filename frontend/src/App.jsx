@@ -12,31 +12,31 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
 // Footer pages - Company
-import AboutUs from "./pages/AboutUs";
-import Careers from "./pages/Careers";
-import Security from "./pages/Security";
-import Status from "./pages/Status";
+import AboutUs from "./OtherPages/AboutUs";
+import Careers from "./OtherPages/Careers";
+import Security from "./OtherPages/Security";
+import Status from "./OtherPages/Status";
 
 // Footer pages - Download
-import MobileApps from "./pages/MobileApps";
-import DesktopApps from "./pages/DesktopApps";
-import CalendarSync from "./pages/CalendarSync";
-import BrowserExtension from "./pages/BrowserExtension";
+import MobileApps from "./OtherPages/MobileApps";
+import DesktopApps from "./OtherPages/DesktopApps";
+import CalendarSync from "./OtherPages/CalendarSync";
+import BrowserExtension from "./OtherPages/BrowserExtension";
 
 // Footer pages - Resources
-import HelpCenter from "./pages/HelpCenter";
-import Pricing from "./pages/Pricing";
-import Blog from "./pages/Blog";
-import Community from "./pages/Community";
+import HelpCenter from "./OtherPages/HelpCenter";
+import Pricing from "./OtherPages/Pricing";
+import Blog from "./OtherPages/Blog";
+import Community from "./OtherPages/Community";
 
 // Footer pages - NoTiFy For
-import SmallBusiness from "./pages/SmallBusiness";
-import Personal from "./pages/Personal";
+import SmallBusiness from "./OtherPages/SmallBusiness";
+import Personal from "./OtherPages/Personal";
 
 // New pages
-import TermsPrivacy from "./pages/TermsPrivacy";
-import Enterprise from "./pages/Enterprise";
-import ExploreMore from "./pages/ExploreMore";
+import TermsPrivacy from "./OtherPages/TermsPrivacy";
+import Enterprise from "./OtherPages/Enterprise";
+import ExploreMore from "./OtherPages/ExploreMore";
 
 // WebSocket connection
 const socket = io("http://localhost:3000"); // Replace with actual URL
