@@ -18,47 +18,23 @@ dotenv.config();
 const app = express();
 connect();
 
-// ✅ Secure CORS Configuration
-const corsOptions = {
-    origin: process.env.FRONTEND_URL || "*", // Change "*" to your frontend URL for security
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-};
-app.use(cors(corsOptions));
-
+app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 
-// ✅ API Routes
 app.use("/users", userRoutes);
 app.use("/pages", pageRoutes);
 app.use("/blocks", blockRoutes);
 
-// ✅ Create HTTP & WebSocket Server
 const server = createServer(app);
 const io = new Server(server, {
-    cors: { origin: process.env.FRONTEND_URL || "*", methods: ["GET", "POST"] },
+    cors: { origin: "*", methods: ["GET", "POST"] },
     perMessageDeflate: true,
 });
 
-const PORT = process.env.PORT || 3000;
-
-// ✅ Start Server & Handle Errors
-server.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-}).on("error", (err) => {
-    if (err.code === "EADDRINUSE") {
-        console.error(`❌ Port ${PORT} is already in use. Exiting...`);
-        process.exit(1);
-    } else {
-        console.error("❌ Server error:", err);
-    }
-});
-
-// ✅ WebSocket Authentication Middleware
 io.use((socket, next) => {
     const token = socket.handshake.auth?.token || socket.handshake.query?.token;
     if (!token) {
@@ -77,7 +53,6 @@ io.use((socket, next) => {
     }
 });
 
-// ✅ WebSocket Events
 io.on("connection", (socket) => {
     console.log(`🟢 WebSocket Connected: ${socket.id}`);
 
@@ -142,6 +117,20 @@ io.on("connection", (socket) => {
 // ✅ Health Check Route
 app.get("/", (req, res) => {
     res.send("Server is running 🚀");
+});
+
+const PORT = process.env.PORT || 3000;
+
+// ✅ Start Server & Handle Errors
+server.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+}).on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+        console.error(`❌ Port ${PORT} is already in use. Exiting...`);
+        process.exit(1);
+    } else {
+        console.error("❌ Server error:", err);
+    }
 });
 
 export { app, server, io };
