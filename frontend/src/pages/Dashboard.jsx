@@ -5,6 +5,9 @@ import axios from "axios";
 import Editor from "../components/Editor";
 import socket, { connectSocket, disconnectSocket } from "../socket";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -179,6 +182,9 @@ const Dashboard = () => {
     return (
         <div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
