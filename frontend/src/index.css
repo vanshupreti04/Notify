@@ -4,3 +4,19 @@
 @tailwind utilities;
 
 
+/* Hide scrollbar but allow scrolling */
+html {
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  body {
+    overflow-y: auto; /* Enables scrolling only when needed */
+  }
+  
+  /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+  body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  

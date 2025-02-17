@@ -9,6 +9,7 @@ import UseCase from "../components/UseCase";
 import Productivity from "../components/Productivity";
 import Testimonial from "../components/Testimonial";
 import Footer from "../components/Footer";
+import StarBorder from "../blocks/StarBorder/StarBorder"; // ✅ Import StarBorder
 
 const Home = () => {
   const { t } = useTranslation(); // ✅ Initialize translation function
@@ -43,13 +44,10 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Login Button with Routing */}
-        <Link
-          to="/login"
-          className="px-6 py-2 text-lg font-medium text-white border-2 border-[#AC6AFF] rounded-lg bg-transparent transition-all duration-300 hover:text-[#AC6AFF]"
-        >
+        {/* ✅ Replacing Normal Button with StarBorder Component */}
+        <StarBorder as={Link} to="/login" className="ml-4 ">
           {t("login")}
-        </Link>
+        </StarBorder>
       </nav>
 
       {/* Hero Section */}

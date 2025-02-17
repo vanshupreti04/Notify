@@ -1,59 +1,126 @@
-import React from 'react';
-// If you have an illustration for the Docs page, import it here.
-// For example, if you have a docsIllustration.svg in your src/assets folder:
-// import docsIllustration from '../assets/docsIllustration.svg';
+import { motion } from "framer-motion";
+import { FaHome, FaRocket, FaExchangeAlt, FaRobot, FaQuestionCircle, FaGithub } from "react-icons/fa";
 
 const Docs = () => {
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-10 lg:px-20">
-      {/* Container for content */}
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-        
-        {/* Left Text Section */}
-        <div className="max-w-xl">
-          <h1 className="text-5xl font-bold mb-6">Docs</h1>
-          <p className="text-gray-300 mb-8 leading-relaxed">
-            Your go-to guide for using NoTiFy. Discover how to create pages, 
-            format content, collaborate in real-time, and leverage 
-            advanced features like Kanban boards and database tables.
-          </p>
-          <div className="flex space-x-4">
-            <button className="bg-purple-600 hover:bg-purple-500 transition px-6 py-3 rounded font-semibold">
-              Get Started
-            </button>
-            <button className="bg-transparent border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white transition px-6 py-3 rounded font-semibold">
-              Learn More
-            </button>
-          </div>
-        </div>
+    <div className="min-h-screen bg-black text-white px-6 py-10 lg:px-32">
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-center mb-20"
+      >
+        <h1 className="text-6xl font-extrabold tracking-wide text-purple-500">
+          NoTiFy Docs
+        </h1>
+        <p className="text-gray-400 text-lg mt-4">
+          Everything you need to know about NoTiFy.
+        </p>
+      </motion.div>
 
-        {/* Right Illustration (Optional) */}
-        <div className="flex-1">
-          {/* If you imported an illustration, use: */}
-          {/* <img src={docsIllustration} alt="Docs Illustration" className="w-full h-auto" /> */}
-          {/* Placeholder illustration (SVG from heroicons.dev) */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="mx-auto w-80 h-80 text-gray-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.2}
+      <div className="space-y-32">
+        {/* Introduction & Overview */}
+        <section className="flex items-start justify-between w-full max-w-6xl mx-auto">
+          <div className="flex items-start w-1/2">
+            <FaHome className="text-purple-500 mr-4 text-6xl" />
+            <h2 className="text-6xl font-bold">Introduction</h2>
+          </div>
+          <p className="text-gray-300 text-lg w-1/2 leading-relaxed">
+            NoTiFy started as a hackathon project, built to be a fast, lightweight, and collaborative note-taking tool. It has evolved into a fully open-source application with powerful features for developers, students, and teams.
+          </p>
+        </section>
+        <hr className="border-t border-gray-700 my-8" />
+
+        {/* Quick Start Guide */}
+        <section className="flex items-start justify-between w-full max-w-6xl mx-auto">
+          <div className="flex items-start w-1/2">
+            <FaRocket className="text-purple-500 mr-4 text-6xl" />
+            <h2 className="text-6xl font-bold">Quick Start</h2>
+          </div>
+          <ul className="text-gray-300 text-lg w-1/2 leading-relaxed space-y-3 list-none">
+            <li><strong>→ Installation:</strong> Download NoTiFy from GitHub and install it.</li>
+            <li><strong>→ Create Your First Note:</strong> Start writing and use Markdown for formatting.</li>
+            <li><strong>→ Sync with GitHub:</strong> Connect GitHub for auto-save and version control.</li>
+          </ul>
+        </section>
+        <hr className="border-t border-gray-700 my-8" />
+
+        {/* Alternatives to NoTiFy */}
+        <section className="flex items-start justify-between w-full max-w-6xl mx-auto">
+          <div className="flex items-start w-1/2">
+            <FaExchangeAlt className="text-purple-500 mr-4 text-6xl" />
+            <h2 className="text-6xl font-bold">Alternatives</h2>
+          </div>
+          <ul className="text-gray-300 text-lg w-1/2 leading-relaxed space-y-3 list-none">
+            <li><strong>→ Notion:</strong> Great for structured note-taking but lacks offline support.</li>
+            <li><strong>→ Google Docs:</strong> Ideal for collaboration but lacks Markdown support.</li>
+            <li><strong>→ Evernote:</strong> Feature-rich but requires premium for full functionality.</li>
+            <li><strong>→ Obsidian:</strong> Powerful Markdown tool but no built-in cloud sync.</li>
+          </ul>
+        </section>
+        <hr className="border-t border-gray-700 my-8" />
+
+        {/* AI Integration */}
+        <section className="flex items-start justify-between w-full max-w-6xl mx-auto">
+          <div className="flex items-start w-1/2">
+            <FaRobot className="text-purple-500 mr-4 text-6xl" />
+            <h2 className="text-6xl font-bold">AI Features</h2>
+          </div>
+          <p className="text-gray-300 text-lg w-1/2 leading-relaxed">
+            NoTiFy is working on AI-powered features such as smart note summarization, intelligent suggestions, and automated organization.
+          </p>
+        </section>
+        <hr className="border-t border-gray-700 my-8" />
+
+        {/* FAQ & Troubleshooting */}
+        <section className="flex items-start justify-between w-full max-w-6xl mx-auto">
+          <div className="flex items-start w-1/2">
+            <FaQuestionCircle className="text-purple-500 mr-4 text-6xl" />
+            <h2 className="text-6xl font-bold">FAQ</h2>
+          </div>
+          <div className="text-gray-300 text-lg w-1/2 leading-relaxed space-y-6">
+            <div>
+              <strong>→ Why isn’t GitHub sync working?</strong>
+              <p className="mt-1">Ensure proper permissions are given.</p>
+            </div>
+
+            <div>
+              <strong>→ Can I use NoTiFy offline?</strong>
+              <p className="mt-1">Yes! Work offline and sync later.</p>
+            </div>
+
+            <div>
+              <strong>→ Is NoTiFy free?</strong>
+              <p className="mt-1">100% open-source, with no subscriptions.</p>
+            </div>
+          </div>
+        </section>
+        <hr className="border-t border-gray-700 my-8" />
+
+        {/* Open Source & Contribution */}
+        <section className="flex items-start justify-between w-full max-w-6xl mx-auto">
+          <div className="flex items-start w-1/2">
+            <FaGithub className="text-purple-500 mr-4 text-6xl" />
+            <h2 className="text-6xl font-bold">Contribute</h2>
+          </div>
+          <p className="text-gray-300 text-lg w-1/2 leading-relaxed">
+            NoTiFy is fully open-source! Join our GitHub community and help improve the project.
+          </p>
+        </section>
+
+        {/* GitHub Button Positioned Below the Text */}
+        <div className="text-center mt-6 max-w-6xl mx-auto">
+          <a
+            href="https://github.com/vanshupreti04/Notify.git"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black text-purple-500 hover:bg-purple-600 hover:text-white px-4 py-2 rounded-full text-lg font-semibold transition duration-300"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 5h12M9 3v2m-6 4h12M3 15h12m-6 2v-2m9 2h2m-2-4h2m-2-4h2m-2-4h2"
-            />
-          </svg>
+            Visit GitHub Repository
+          </a>
         </div>
       </div>
-
-      {/* Additional content (optional) */}
-      {/* 
-         You can add more sections below—like an FAQ, 
-         a table of contents, or step-by-step tutorials. 
-      */}
     </div>
   );
 };

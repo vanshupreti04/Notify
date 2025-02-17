@@ -1,117 +1,57 @@
 import React from 'react';
-// If you have a custom illustration for your About page, import it here
-// import aboutIllustration from '../assets/aboutIllustration.svg';
+import logo from '../assets/logo.png'; // Ensure correct path to logo
+import { AnimatedTooltipPreview } from '../blocks/Team/TeamSecondDemo'; // Importing the AnimatedTooltipPreview component
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-10 lg:px-20">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-black text-white px-8 lg:px-48 py-16">
+      
+      {/* Header Section: Logo and Heading together */}
+      <div className="flex items-center justify-center mb-16">
+        <img src={logo} alt="NoTiFy Logo" className="h-16 mr-4" />
+        <h1 className="text-5xl font-bold text-center">About NoTiFy</h1>
+      </div>
+
+      {/* Separator Line */}
+      <hr className="border-t border-gray-700 mb-12 w-7/4 mx-auto" />
+
+      {/* Our Mission Section */}
       <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-        {/* Left Side - Heading & Description */}
-        <div className="max-w-xl">
-          <h1 className="text-5xl font-bold mb-6">About NoTiFy</h1>
-          <p className="text-gray-300 mb-8 leading-relaxed">
-            NoTiFy is your ultimate space for seamless note-taking and 
-            collaboration—empowering teams and individuals to brainstorm, 
-            organize, and execute ideas efficiently. Inspired by Notion’s 
-            versatility, NoTiFy provides intuitive features for every workflow.
-          </p>
-          <button className="bg-purple-600 hover:bg-purple-500 transition px-6 py-3 rounded font-semibold">
-            Learn More
-          </button>
+        {/* Left Side - "Our Mission" Heading */}
+        <div className="lg:w-1/3 text-center">
+          <h2 className="text-7xl font-bold leading-tight">Our Mission</h2>
         </div>
 
-        {/* Right Side - Illustration (Placeholder) */}
-        <div className="flex-1">
-          {/* Replace this SVG with your own illustration or an imported image */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="mx-auto w-80 h-80 text-gray-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.232 5.232l-4.464 4.464m0 0l4.464 4.464m-4.464-4.464H21M3 12h6.768"
-            />
-          </svg>
+        {/* Right Side - Description (Broken into 4-5 lines) */}
+        <div className="lg:w-1/2  text-16px text-gray-400 leading-relaxed">
+          <p>
+            At NoTiFy, our mission is to simplify collaboration. We
+            believe that powerful note-taking should be accessible to everyone. 
+            Our goal is to make sure that anyone,
+            anywhere can capture their thoughts seamlessly. We
+            want NoTiFy to be the go-to tool for effective personal and team note-taking.
+          </p>
         </div>
       </div>
 
-      {/* Additional Sections (Team, Mission, etc.) */}
-      <div className="mt-16">
-        <h2 className="text-3xl font-semibold mb-4">Our Mission</h2>
-        <p className="text-gray-300 mb-8">
-          At NoTiFy, our mission is to simplify collaboration and organization.
-          We believe that powerful note-taking should be accessible to everyone,
-          fostering creativity and productivity in any setting.
-        </p>
+      {/* Separator Line */}
+      <hr className="border-t border-gray-700 my-12 w-5/4 mx-auto" />
 
-        <h2 className="text-3xl font-semibold mb-4">Meet the Team</h2>
-        <p className="text-gray-300 mb-8">
-          Our diverse team of developers, designers, and content creators is
-          dedicated to building intuitive features that help you focus on what
-          matters most—turning your ideas into action.
-        </p>
+      {/* Meet the Team Section */}
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+        {/* Left Side - "Meet the Team" Heading */}
+        <div className="lg:w-1/3 text-center">
+          <h2 className="text-7xl font-bold">Meet the Team</h2>
+          <p className="text-gray-400 text-16px text-sm mt-8">
+            A team of four passionate developers working together to build NoTiFy
+            as a free, open-source note-taking app that is simple, efficient, and
+            accessible to everyone.
+          </p>
+        </div>
 
-        {/* Team Grid with pop-up hover effect */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Each card has transform and transition classes for the hover pop-up */}
-          <div className="
-            bg-gray-800 
-            p-6 
-            rounded-2xl 
-            shadow-lg 
-            text-center
-            transform
-            transition-transform
-            duration-200
-            hover:scale-105
-            hover:shadow-xl
-            cursor-pointer
-          ">
-            <h3 className="text-xl font-bold">Yash Vardhan Ruia</h3>
-            <p className="text-gray-400">Product Designer</p>
-          </div>
-
-          <div className="
-            bg-gray-800 
-            p-6 
-            rounded-2xl 
-            shadow-lg 
-            text-center
-            transform
-            transition-transform
-            duration-200
-            hover:scale-105
-            hover:shadow-xl
-            cursor-pointer
-          ">
-            <h3 className="text-xl font-bold">Vansh Upreti</h3>
-            <p className="text-gray-400">Full-Stack Developer</p>
-          </div>
-
-          <div className="
-            bg-gray-800 
-            p-6 
-            rounded-2xl 
-            shadow-lg 
-            text-center
-            transform
-            transition-transform
-            duration-200
-            hover:scale-105
-            hover:shadow-xl
-            cursor-pointer
-          ">
-            <h3 className="text-xl font-bold">Yuvraj Singh Parihar</h3>
-            <p className="text-gray-400">Content Strategist</p>
-          </div>
-
-          {/* Add more team members as needed with the same hover classes */}
+        {/* Right Side - Team Members (Using the AnimatedTooltipPreview component) */}
+        <div className="lg:w-2/3">
+          <AnimatedTooltipPreview />
         </div>
       </div>
     </div>
@@ -119,4 +59,3 @@ const About = () => {
 };
 
 export default About;
-
